@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>한국명상협회 회원가입신청서</title>
+<style>
+  :root{ --accent:#2E5E4E; --accent2:#7FB29B; --bg:#eef2f0; --line:#d5ddd9; --text:#233; --muted:#5b6b64; --req:#c0392b; }
+  *{ box-sizing:border-box; }
+  body{ font-family:"Malgun Gothic","맑은 고딕","Apple SD Gothic Neo","Noto Sans KR",sans-serif; background:var(--bg); color:var(--text); margin:0; line-height:1.6; }
+  .wrap{ max-width:720px; margin:0 auto; padding:16px; }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px; box-shadow:0 3px 14px rgba(0,0,0,.06); overflow:hidden; margin-top:16px; }
+  header.top{ text-align:center; padding:28px 20px 22px; background:linear-gradient(135deg,var(--accent),#3a6b58); color:#fff; }
+  header.top .logo{ width:56px;height:56px;border-radius:16px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:26px; }
+  header.top h1{ margin:0; font-size:1.5rem; letter-spacing:-.3px; }
+  header.top p{ margin:6px 0 0; font-size:.9rem; opacity:.92; }
+  .intro{ padding:16px 20px; font-size:.92rem; color:var(--muted); background:#f6faf8; border-bottom:1px solid var(--line); }
+  form{ padding:6px 20px 20px; }
+  .field{ margin:18px 0; }
+  .field > label{ display:block; font-weight:600; margin-bottom:7px; font-size:.98rem; }
+  .req{ color:var(--req); font-weight:700; margin-left:3px; }
+  .hint{ font-size:.82rem; color:var(--muted); margin-top:5px; }
+  input[type=text],input[type=tel],input[type=email],input[type=date],textarea,select{
+    width:100%; padding:11px 12px; border:1px solid var(--line); border-radius:9px; font-size:1rem; font-family:inherit; background:#fff; }
+  input:focus,textarea:focus{ outline:none; border-color:var(--accent2); box-shadow:0 0 0 3px rgba(127,178,155,.25); }
+  textarea{ min-height:90px; resize:vertical; }
+  .row2{ display:flex; gap:10px; } .row2 > *{ flex:1; }
+  .choices{ display:flex; flex-wrap:wrap; gap:8px; }
+  .choices label{ display:inline-flex; align-items:center; gap:7px; border:1px solid var(--line); border-radius:9px; padding:9px 14px; cursor:pointer; font-size:.96rem; background:#fff; }
+  .choices input{ accent-color:var(--accent); width:17px;height:17px; }
+  .choices label:hover{ border-color:var(--accent2); }
+  .accountbox{ background:#fff8ea; border:1px solid #f0d9a8; border-radius:9px; padding:11px 13px; font-size:.9rem; color:#6b5320; margin-bottom:10px; }
+  .agree{ background:#f6faf8; border:1px solid var(--line); border-radius:10px; padding:14px; margin-top:8px; font-size:.9rem; }
+  .agree .stmt{ color:var(--muted); margin-bottom:10px; }
+  .agree label{ display:flex; align-items:flex-start; gap:9px; font-weight:600; cursor:pointer; }
+  .agree input{ width:19px;height:19px;margin-top:2px; accent-color:var(--accent); flex:none; }
+  .btn{ width:100%; padding:15px; margin-top:22px; border:none; border-radius:11px; background:var(--accent); color:#fff; font-size:1.08rem; font-weight:700; cursor:pointer; }
+  .btn:hover{ background:#255043; } .btn:disabled{ opacity:.6; cursor:default; }
+  .err{ color:var(--req); font-size:.82rem; margin-top:5px; display:none; }
+  .field.invalid .err{ display:block; }
+  .field.invalid input,.field.invalid textarea{ border-color:var(--req); }
+  .foot{ text-align:center; color:var(--muted); font-size:.8rem; padding:16px; }
+  /* thank-you */
+  #thanks{ display:none; text-align:center; padding:44px 24px; }
+  #thanks .ic{ width:70px;height:70px;border-radius:50%;background:#e7f1ec;color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:38px;margin:0 auto 16px; }
+  #thanks h2{ margin:0 0 8px; color:var(--accent); }
+  #thanks p{ color:var(--muted); margin:4px 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <header class="top">
+      <div class="logo">🧘</div>
+      <h1>한국명상협회 회원가입신청서</h1>
+      <p>온라인 가입 신청</p>
+    </header>
+
+    <div id="formview">
+      <div class="intro">
+        본인은 한국명상협회의 설립 목적과 취지에 찬동하며, 협회가 추진하는 사업과 활동에 적극 동참하고자
+        자발적으로 회원가입을 신청합니다. 아래 항목을 작성해 주세요. (<span class="req">*</span> 필수)
+      </div>
+
+      <iframe name="hidden_iframe" id="hidden_iframe" style="display:none" title="submit"></iframe>
+      <form id="joinForm" method="POST" target="hidden_iframe" novalidate>
+
+        <div class="field" data-check="required">
+          <label>성명<span class="req">*</span></label>
+          <input type="text" name="name" autocomplete="name">
+          <div class="err">성명을 입력해 주세요.</div>
+        </div>
+
+        <div class="field" data-check="radio">
+          <label>성별<span class="req">*</span></label>
+          <div class="choices">
+            <label><input type="radio" name="gender" value="남">남</label>
+            <label><input type="radio" name="gender" value="여">여</label>
+          </div>
+          <div class="err">성별을 선택해 주세요.</div>
+        </div>
+
+        <div class="field" data-check="required">
+          <label>생년월일<span class="req">*</span></label>
+          <input type="date" name="birth">
+          <div class="err">생년월일을 입력해 주세요.</div>
+        </div>
+
+        <div class="field">
+          <label>주소</label>
+          <div class="row2" style="margin-bottom:10px">
+            <input type="text" name="zip" placeholder="우편번호 (선택)" style="max-width:180px">
+          </div>
+          <input type="text" name="address" placeholder="주소를 입력해 주세요" data-req="주소를 입력해 주세요.">
+          <div class="err" data-for="address">주소를 입력해 주세요.</div>
+        </div>
+
+        <div class="field" data-check="required">
+          <label>휴대폰<span class="req">*</span></label>
+          <input type="tel" name="phone" placeholder="예: 010-1234-5678" autocomplete="tel">
+          <div class="err">휴대폰 번호를 입력해 주세요.</div>
+        </div>
+
+        <div class="field" data-check="email">
+          <label>이메일<span class="req">*</span></label>
+          <input type="email" name="email" placeholder="예: name@example.com" autocomplete="email">
+          <div class="err">올바른 이메일을 입력해 주세요.</div>
+        </div>
+
+        <div class="field">
+          <label>주요 학력 및 경력</label>
+          <textarea name="career" placeholder="학력·경력과 기간을 자유롭게 작성해 주세요.&#10;예) 2010~2014 ○○대학교 ○○학과 / 2015~현재 ○○ 근무"></textarea>
+        </div>
+
+        <div class="field">
+          <label>전공 또는 관심분야</label>
+          <input type="text" name="interest" placeholder="예) 명상, 심리상담, 요가">
+          <div class="hint">최대 3개, 쉼표(,)로 구분해 입력해 주세요.</div>
+        </div>
+
+        <div class="field">
+          <label>참여 학회</label>
+          <input type="text" name="society" placeholder="해당 시 작성">
+          <div class="hint">최대 2개, 쉼표(,)로 구분해 입력해 주세요.</div>
+        </div>
+
+        <div class="field" data-check="radio">
+          <label>회원신청 구분<span class="req">*</span></label>
+          <div class="choices">
+            <label><input type="radio" name="memberType" value="정회원">정회원</label>
+            <label><input type="radio" name="memberType" value="준회원">준회원</label>
+            <label><input type="radio" name="memberType" value="특별회원">특별회원</label>
+          </div>
+          <div class="err">회원 구분을 선택해 주세요.</div>
+        </div>
+
+        <div class="field" data-check="radio">
+          <label>연회비 납부<span class="req">*</span></label>
+          <div class="accountbox">
+            연회비 <b>연 100,000원</b> &nbsp;·&nbsp; 입금계좌 <b>농협 301-0368-8386-11</b> (예금주: 한국명상협회)
+          </div>
+          <div class="choices">
+            <label><input type="radio" name="feeStatus" value="납부완료">납부완료</label>
+            <label><input type="radio" name="feeStatus" value="납부예정">납부예정</label>
+          </div>
+          <div class="err">납부 여부를 선택해 주세요.</div>
+        </div>
+
+        <div class="field" data-check="agree">
+          <div class="agree">
+            <div class="stmt">“본인은 한국명상협회의 설립 목적과 취지에 찬동하며, 협회가 추진하는 사업과 활동에 적극 동참하고자 자발적으로 회원가입을 신청하오니, 승인하여 주시기를 바랍니다.”</div>
+            <label><input type="checkbox" name="agree" value="동의">위 내용에 동의하며 회원가입을 신청합니다.<span class="req">*</span></label>
+          </div>
+          <div class="err">가입 동의에 체크해 주세요.</div>
+        </div>
+
+        <button type="submit" class="btn" id="submitBtn">회원가입 신청하기</button>
+      </form>
+    </div>
+
+    <div id="thanks">
+      <div class="ic">✓</div>
+      <h2>신청이 접수되었습니다</h2>
+      <p>한국명상협회 회원가입 신청이 정상적으로 접수되었습니다.</p>
+      <p>승인 절차 후 개별 안내드리겠습니다. 감사합니다.</p>
+    </div>
+  </div>
+  <div class="foot">한국명상협회 · 회원가입 신청</div>
+</div>
+
+<script>
+  // ▼▼▼ 배포한 Google Apps Script 웹앱 URL을 여기에 넣으세요 (…/exec) ▼▼▼
+  const SCRIPT_URL = "";
+  // ▲▲▲
+
+  const form = document.getElementById('joinForm');
+  const btn = document.getElementById('submitBtn');
+  const iframe = document.getElementById('hidden_iframe');
+  let submitting = false;
+
+  function setInvalid(field, bad){ field.classList.toggle('invalid', bad); }
+
+  function validate(){
+    let ok = true;
+    document.querySelectorAll('.field').forEach(function(f){
+      const type = f.getAttribute('data-check');
+      let bad = false;
+      if(type==='required'){ const i=f.querySelector('input,textarea'); bad = !i.value.trim(); }
+      else if(type==='email'){ const i=f.querySelector('input'); bad = !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(i.value.trim()); }
+      else if(type==='radio'){ bad = !f.querySelector('input:checked'); }
+      else if(type==='agree'){ bad = !f.querySelector('input:checked'); }
+      // 주소(별도 필수)
+      const addr=f.querySelector('input[name=address]');
+      if(addr){ bad = !addr.value.trim(); }
+      if(type||addr){ setInvalid(f, bad); if(bad) ok=false; }
+    });
+    return ok;
+  }
+
+  form.addEventListener('submit', function(e){
+    if(!validate()){ e.preventDefault(); const first=document.querySelector('.field.invalid'); if(first) first.scrollIntoView({behavior:'smooth',block:'center'}); return; }
+    if(!SCRIPT_URL){ e.preventDefault(); alert('접수 서버가 아직 연결되지 않았습니다.\n관리자에게 문의해 주세요.'); return; }
+    // OK → 실제 전송 (숨김 iframe로)
+    form.action = SCRIPT_URL;
+    submitting = true;
+    btn.disabled = true; btn.textContent = '전송 중…';
+  });
+
+  iframe.addEventListener('load', function(){
+    if(!submitting) return;   // 최초 로드 무시
+    document.getElementById('formview').style.display='none';
+    document.getElementById('thanks').style.display='block';
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+</script>
+</body>
+</html>
