@@ -38,7 +38,7 @@
   .btn:hover{ background:#255043; } .btn:disabled{ opacity:.6; cursor:default; }
   .err{ color:var(--req); font-size:.82rem; margin-top:5px; display:none; }
   .field.invalid .err{ display:block; }
-  .field.invalid input,.field.invalid textarea{ border-color:var(--req); }
+  .field.invalid input,.field.invalid textarea,.field.invalid select{ border-color:var(--req); }
   .foot{ text-align:center; color:var(--muted); font-size:.8rem; padding:16px; }
   /* thank-you */
   #thanks{ display:none; text-align:center; padding:44px 24px; }
@@ -79,10 +79,15 @@
           <div class="err">성별을 선택해 주세요.</div>
         </div>
 
-        <div class="field" data-check="required">
+        <div class="field" data-check="birth">
           <label>생년월일<span class="req">*</span></label>
-          <input type="date" name="birth">
-          <div class="err">생년월일을 입력해 주세요.</div>
+          <div class="row2">
+            <select name="birthYear" id="birthYear" aria-label="연도"><option value="">연도</option></select>
+            <select name="birthMonth" id="birthMonth" aria-label="월"><option value="">월</option></select>
+            <select name="birthDay" id="birthDay" aria-label="일"><option value="">일</option></select>
+          </div>
+          <input type="hidden" name="birth" id="birth">
+          <div class="err">생년월일을 선택해 주세요.</div>
         </div>
 
         <div class="field">
@@ -177,6 +182,45 @@
   const iframe = document.getElementById('hidden_iframe');
   let submitting = false;
 
+  // ── 생년월일 드롭다운 ──
+  (function initBirth(){
+    const ySel = document.getElementById('birthYear');
+    const mSel = document.getElementById('birthMonth');
+    const dSel = document.getElementById('birthDay');
+    const hidden = document.getElementById('birth');
+    const thisYear = new Date().getFullYear();
+
+    for(let y=thisYear; y>=1930; y--){
+      ySel.insertAdjacentHTML('beforeend', '<option value="'+y+'">'+y+'년</option>');
+    }
+    for(let m=1; m<=12; m++){
+      mSel.insertAdjacentHTML('beforeend', '<option value="'+m+'">'+m+'월</option>');
+    }
+
+    function fillDays(){
+      const y = parseInt(ySel.value,10), m = parseInt(mSel.value,10);
+      const prev = dSel.value;
+      const days = (y && m) ? new Date(y, m, 0).getDate() : 31;
+      dSel.innerHTML = '<option value="">일</option>';
+      for(let d=1; d<=days; d++){
+        dSel.insertAdjacentHTML('beforeend', '<option value="'+d+'">'+d+'일</option>');
+      }
+      if(prev && parseInt(prev,10) <= days) dSel.value = prev;
+    }
+
+    function syncHidden(){
+      const y = ySel.value, m = mSel.value, d = dSel.value;
+      hidden.value = (y && m && d)
+        ? y + '-' + String(m).padStart(2,'0') + '-' + String(d).padStart(2,'0')
+        : '';
+    }
+
+    ySel.addEventListener('change', function(){ fillDays(); syncHidden(); });
+    mSel.addEventListener('change', function(){ fillDays(); syncHidden(); });
+    dSel.addEventListener('change', syncHidden);
+    fillDays();
+  })();
+
   function setInvalid(field, bad){ field.classList.toggle('invalid', bad); }
 
   function validate(){
@@ -188,6 +232,7 @@
       else if(type==='email'){ const i=f.querySelector('input'); bad = !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(i.value.trim()); }
       else if(type==='radio'){ bad = !f.querySelector('input:checked'); }
       else if(type==='agree'){ bad = !f.querySelector('input:checked'); }
+      else if(type==='birth'){ bad = !document.getElementById('birth').value; }
       // 주소(별도 필수)
       const addr=f.querySelector('input[name=address]');
       if(addr){ bad = !addr.value.trim(); }
